@@ -27,12 +27,10 @@ jobs:
         run: |
           mkdir dist
           zip dist/calculadora.zip index.html
-
+      
       - name: Publicar version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            dist/calculadora.zip \
-            --title "Version $GITHUB_REF_NAME" \
-            --generate-notes
+          gh release upload "$GITHUB_REF_NAME" \
+            dist/calculadora.zip --clobber
