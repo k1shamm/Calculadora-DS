@@ -1,0 +1,38 @@
+
+name: Construccion y liberacion
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  construir:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Validar aplicacion
+        run: |
+          test -f index.html
+          grep -q "Calculadora Data Seekers" index.html
+          echo "Validacion exitosa"
+
+      - name: Construir paquete
+        run: |
+          mkdir dist
+          zip dist/calculadora.zip index.html
+
+      - name: Publicar version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            dist/calculadora.zip \
+            --title "Version $GITHUB_REF_NAME" \
+            --generate-notes
