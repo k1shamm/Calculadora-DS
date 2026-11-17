@@ -26,7 +26,7 @@ jobs:
       - name: Construir paquete
         run: |
           mkdir dist
-          zip dist/calculadora.zip index.html
+          zip dist/calculadora.zip index.html script.js estilo.css
       
       - name: Publicar version
         env:
